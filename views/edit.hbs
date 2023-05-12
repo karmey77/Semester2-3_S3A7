@@ -1,0 +1,57 @@
+<header>
+    <!-- navigation -->
+    <nav class="navbar navbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <img src="https://assets-lighthouse.s3.amazonaws.com/uploads/image/file/6227/restaurant-list-logo.png"
+                    width="30" height="30" class="d-inline-block align-top" alt="我的餐廳清單">
+                我的餐廳清單
+            </a>
+            <a href="/create">新增餐廳</a>
+        </div>
+    </nav>
+    <div class="banner"></div>
+</header>
+
+<form action="/restaurants/{{ restaurant._id }}/edit" method="POST">
+    <input type="text" placeholder="name" name="name" value="{{ restaurant.name }}">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 col-md-10 mx-auto">
+
+                <p class="mb-1">
+                    <span class="text-secondary">
+                        <i class="fas fa-utensils pr-2"></i>
+                        類別：
+                    </span>
+                    <input type="text" placeholder="category" name="category" value="{{ restaurant.category }}">
+                </p>
+
+                <p class="mb-1">
+                    <span class="text-secondary">
+                        <i class="fas fa-map-marker-alt pr-2"></i>
+                        地址：
+                    </span>
+                    <input type="text" placeholder="location" name="location" value="{{ restaurant.location }}">
+                    <input type="text" placeholder="google_map" name="google_map" value="{{ restaurant.google_map }}">
+                </p>
+
+                <p class="mb-1">
+                    <span class="text-secondary">
+                        <i class="fas fa-mobile-alt pr-2"></i>
+                        電話：
+                    </span>
+                    <input type="text" placeholder="phone" name="phone" value="{{ restaurant.phone }}">
+                </p>
+
+                <p class="mb-5">
+                    <input type="text" placeholder="description" name="description"
+                        value="{{ restaurant.description }}">
+                </p>
+                <input type="text" placeholder="image" name="image" value="{{ restaurant.image }}">
+            </div>
+        </div>
+    </div>
+    <button type="submit">Save</button>
+    <a href="/">back</a>
+</form>
