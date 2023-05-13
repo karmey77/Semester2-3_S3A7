@@ -30,7 +30,7 @@ db.once('open', () => {
 })
 
 // require packages used in the project
-const port = 3002
+const port = 3003
 
 app.use(express.static('public'))
 
@@ -40,17 +40,6 @@ app.get('/', (req, res) => {
         .lean() // 把 Mongoose 的 Model 物件轉換成乾淨的 JavaScript 資料陣列
         .then(restaurant => res.render('index', { restaurant })) // 將資料傳給 index 樣板
         .catch(error => console.error(error)) // 錯誤處理
-})
-
-// detail
-app.get('/restaurants/:restaurant_id', (req, res) => {
-    const id = req.params.restaurant_id
-    return Restaurant.find()
-        .lean()
-        .then((restaurants) => restaurants.filter(restaurant => restaurant._id.toString() === id))
-        .then((restaurant) => restaurant[0])
-        .then((restaurant) => res.render('show', { restaurant: restaurant }))
-        .catch(error => console.log(error))
 })
 
 // search
@@ -68,27 +57,62 @@ app.get('/search', (req, res) => {
 })
 
 // create
-app.get('/create', (req, res) => {
+app.get('/restaurants/new', (req, res) => {
     console.log("This is create")
     return res.render('new')
 })
 
 app.post('/restaurants', (req, res) => {
-    console.log(req.body)
     const restaurant = req.body
     return Restaurant.create(restaurant)     // 存入資料庫
         .then(() => res.redirect('/')) // 新增完成後導回首頁
         .catch(error => console.log(error))
 })
 
+// detail
+app.get('/restaurants/:restaurant_id', (req, res) => {
+    const id = req.params.restaurant_id
+    return Restaurant.find()
+        .lean()
+        .then((restaurants) => restaurants.filter(restaurant => restaurant._id.toString() === id))
+        .then((restaurant) => restaurant[0])
+        .then((restaurant) => res.render('show', { restaurant: restaurant }))
+        .catch(error => console.log(error))
+})
+
 // edit
+app.get('/restaurants/:restaurant_id/edit', (req, res) => {
+    const id = req.params.restaurant_id
+    return Restaurant.find()
+        .lean()
+        .then((restaurants) => restaurants.filter(restaurant => restaurant._id.toString() === id))
+        .then((restaurant) => restaurant[0])
+        .then((restaurant) => res.render('edit', { restaurant: restaurant }))
+        .catch(error => console.log(error))
+})
+
 app.post('/restaurants/:restaurant_id/edit', (req, res) => {
-    console.log("this is edit")
     const id = req.params.restaurant_id
     const name = req.body.name
+    const name_en = req.body.name_en
+    const category = req.body.category
+    const location = req.body.location
+    const google_map = req.body.google_map
+    const phone = req.body.phone
+    const description = req.body.description
+    const image = req.body.image
+
     return Restaurant.findById(id)
         .then(restaurant => {
             restaurant.name = name
+            restaurant.name_en = name_en
+            restaurant.category = category
+            restaurant.location = location
+            restaurant.google_map = google_map
+            restaurant.phone = phone
+            restaurant.description = description
+            restaurant.image = image
+
             return restaurant.save()
         })
         .then(() => res.redirect(`/restaurants/${id}`))
