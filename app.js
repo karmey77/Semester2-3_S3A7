@@ -121,11 +121,11 @@ app.post('/restaurants/:restaurant_id/edit', (req, res) => {
 
 // delete
 app.post('/restaurants/:id/delete', (req, res) => {
-    console.log("this is delete")
     const id = req.params.id
-
     return Restaurant.findById(id)
-        .then(restaurant => restaurant.remove())
+        .then(restaurant => {
+            return restaurant.deleteOne()
+        })
         .then(() => res.redirect('/'))
         .catch(error => console.log(error))
 })
